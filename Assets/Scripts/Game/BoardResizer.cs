@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace SnakeU.GameScene {
     [ExecuteAlways]
-    public class GameBoardResizer: MonoBehaviour {
-        public GameBoard board;
+    public class BoardResizer: MonoBehaviour {
+        public Board board;
 
         void Start() {
             ResizeItself();
@@ -23,7 +23,10 @@ namespace SnakeU.GameScene {
 
 #if UNITY_EDITOR
         void Update() {
-            ResizeItself();
+            // during edit mode, it is possible that you didn't set board field yet
+            // this conditional avoids getting a NullException error message
+            if(board != null)
+                ResizeItself();
         }
     }
 #endif
