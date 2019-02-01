@@ -3,7 +3,7 @@ using UnityEngine;
 namespace SnakeU.GameScene {
     [ExecuteAlways]
     public class BoardResizer: MonoBehaviour {
-        public Board board;
+        public BoardData boardData;
 
         void Start() {
             ResizeItself();
@@ -15,8 +15,8 @@ namespace SnakeU.GameScene {
 
         Vector3 CalculateBoardScale() {
             return new Vector3(
-                board.dimensions.columns * board.blockSize.width,
-                board.dimensions.rows * board.blockSize.height,
+                boardData.dimensions.columns * boardData.blockSize.width,
+                boardData.dimensions.rows * boardData.blockSize.height,
                 transform.localScale.z
             );
         }
@@ -25,7 +25,7 @@ namespace SnakeU.GameScene {
         void Update() {
             // during edit mode, it is possible that you didn't set board field yet
             // this conditional avoids getting a NullException error message
-            if(board != null)
+            if(boardData != null)
                 ResizeItself();
         }
     }
