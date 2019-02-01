@@ -2,8 +2,13 @@ using UnityEngine;
 
 namespace SnakeU.GameScene {
     [ExecuteAlways]
+    [RequireComponent(typeof(Board))]
     public class BoardResizer: MonoBehaviour {
-        public BoardData boardData;
+        Board board;
+
+        void Awake() {
+            board = GetComponent<Board>();
+        }
 
         void Start() {
             ResizeItself();
@@ -19,6 +24,10 @@ namespace SnakeU.GameScene {
                 boardData.dimensions.rows * boardData.blockSize.height,
                 transform.localScale.z
             );
+        }
+
+        BoardData boardData {
+            get { return board.boardData ?? null; }
         }
 
 #if UNITY_EDITOR

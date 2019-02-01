@@ -122,6 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 443524744}
   - component: {fileID: 443524743}
+  - component: {fileID: 443524746}
   - component: {fileID: 443524745}
   m_Layer: 8
   m_Name: Board
@@ -202,6 +203,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a1a7c52088a3468fa235b534a3a4bd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boardData: {fileID: 11400000, guid: ebe8418b7ceb84ebea2538439cf3927a, type: 2}
+--- !u!114 &443524746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 443524742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55a89bb9642ff49acb6677cddf37b0f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   boardData: {fileID: 11400000, guid: ebe8418b7ceb84ebea2538439cf3927a, type: 2}
