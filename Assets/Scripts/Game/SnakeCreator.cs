@@ -33,11 +33,8 @@ namespace SnakeU.GameScene {
 
         void CreateInitialChildren() {
             for(int i = 0; i < snake.snakeData.initialSize; i++) {
-                var child = GameObject.Instantiate(snake.snakeData.childPrefab, snake.transform);
                 var childCoordinates = snake.headCoordinates + growthDirection * i;
-                child.transform.localScale = snake.blockSize;
-                child.transform.position = snake.boardCoordinates.GetPositionForCoordinates(childCoordinates);
-                child.transform.SetParent(snake.transform, true);
+                snake.AddChildWithCoordinates(childCoordinates);
             }
         }
 

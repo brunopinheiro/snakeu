@@ -31,9 +31,12 @@ namespace SnakeU.GameScene {
         }
 
         public Vector2 GetPositionForCoordinates(Vector2 coordinates) {
+            var horizontalAdjustment = boardDimensions.columns % 2 == 0 ? .5f : 0;
+            var verticalAdjustment = boardDimensions.rows % 2 == 0 ? .5f : 0;
+
             return new Vector2(
-                topLeftPosition.x + coordinates.x * blockSize.width,
-                topLeftPosition.y + coordinates.y * blockSize.height
+                topLeftPosition.x + (coordinates.x + horizontalAdjustment) * blockSize.width,
+                topLeftPosition.y + (coordinates.y + verticalAdjustment) * blockSize.height
             );
         }
 
