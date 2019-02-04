@@ -31,7 +31,7 @@ namespace SnakeU.GameScene {
         }
 
         void InitializeDependencies() {
-            if(board != null)
+            if(board == null)
                 board = GameObject.FindObjectOfType<Board>();
         }
 
@@ -46,6 +46,13 @@ namespace SnakeU.GameScene {
             child.transform.localScale = blockSize;
             child.transform.position = boardCoordinates.GetPositionForCoordinates(coordinates);
             child.transform.SetParent(transform, true);
+        }
+
+        public void MoveInDirection(Vector2 direction) {
+            var tail = transform.GetChild(transform.childCount - 1);
+            tail.transform.SetAsFirstSibling();
+            headCoordinates += direction;
+            tail.transform.position = boardCoordinates.GetPositionForCoordinates(headCoordinates);
         }
     }
 }
