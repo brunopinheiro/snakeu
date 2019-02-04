@@ -27,7 +27,25 @@ namespace SnakeU.GameScene {
         }
 
         void Awake() {
-            board = GameObject.FindObjectOfType<Board>();
+            InitializeDependencies();
+        }
+
+        void InitializeDependencies() {
+            if(board != null)
+                board = GameObject.FindObjectOfType<Board>();
+        }
+
+#if UNITY_EDITOR
+        void Update() {
+            InitializeDependencies();
+        }
+#endif
+
+        public void AddChildWithCoordinates(Vector2 coordinates) {
+            var child = GameObject.Instantiate(snakeData.childPrefab, transform);
+            child.transform.localScale = blockSize;
+            child.transform.position = boardCoordinates.GetPositionForCoordinates(coordinates);
+            child.transform.SetParent(transform, true);
         }
     }
 }
