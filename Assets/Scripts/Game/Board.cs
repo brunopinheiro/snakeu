@@ -6,12 +6,7 @@ namespace SnakeU.GameScene {
         public BoardData boardData;
         
         public BoardCoordinates boardCoordinates {
-            get;
-            private set;
-        }
-
-        void Awake() {
-            boardCoordinates = new BoardCoordinates(this);
+            get { return new BoardCoordinates(this); }
         }
     }
 }

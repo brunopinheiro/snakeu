@@ -8,6 +8,13 @@ namespace SnakeU.GameScene {
         static Vector2 growthDirection = Vector2.left;
 
         void Awake() {
+            InitializeDependencies();
+        }
+
+        void InitializeDependencies() {
+            if(snake != null)
+                return;
+
             snake = GetComponent<Snake>();
         }
 
@@ -36,8 +43,7 @@ namespace SnakeU.GameScene {
 
 #if UNITY_EDITOR
         void Update() {
-            if(snake == null || snake.board == null)
-                return;
+            InitializeDependencies();
 
             if(snake.transform.childCount != snake.snakeData.initialSize) {
                 ClearChildren();

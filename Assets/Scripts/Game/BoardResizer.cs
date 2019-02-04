@@ -7,6 +7,13 @@ namespace SnakeU.GameScene {
         Board board;
 
         void Awake() {
+            InitializeDependencies();
+        }
+
+        void InitializeDependencies() {
+            if(board != null)
+                return;
+
             board = GetComponent<Board>();
         }
 
@@ -32,6 +39,8 @@ namespace SnakeU.GameScene {
 
 #if UNITY_EDITOR
         void Update() {
+            InitializeDependencies();
+
             // during edit mode, it is possible that you didn't set board field yet
             // this conditional avoids getting a NullException error message
             if(boardData != null)
