@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: DefaultBoard
   m_EditorClassIdentifier: 
   dimensions:
-    columns: 20
-    rows: 20
+    columns: 25
+    rows: 25
   blockSize:
     width: 0.3
     height: 0.3

@@ -32,8 +32,8 @@ namespace SnakeU.GameScene {
 
         public Vector2 GetPositionForCoordinates(Vector2 coordinates) {
             return new Vector2(
-                topLeftPosition.x + coordinates.x * blockSize.width,
-                topLeftPosition.y + coordinates.y * blockSize.height
+                topLeftPosition.x + (coordinates.x + .5f) * blockSize.width,
+                topLeftPosition.y + (coordinates.y + .5f) * blockSize.height
             );
         }
 
