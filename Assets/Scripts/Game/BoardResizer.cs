@@ -8,6 +8,7 @@ namespace SnakeU.GameScene {
 
         void Awake() {
             InitializeDependencies();
+            ResizeItself();
         }
 
         void InitializeDependencies() {
@@ -15,10 +16,6 @@ namespace SnakeU.GameScene {
                 return;
 
             board = GetComponent<Board>();
-        }
-
-        void Start() {
-            ResizeItself();
         }
 
         void ResizeItself() {

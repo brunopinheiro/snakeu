@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace SnakeU.GameScene {
@@ -26,6 +27,10 @@ namespace SnakeU.GameScene {
             get { return board.boardData.snake; }
         }
 
+        NotificationCenter boardNotificationCenter {
+            get { return board.notificationCenter; }
+        }
+
         void Awake() {
             InitializeDependencies();
         }
@@ -42,17 +47,32 @@ namespace SnakeU.GameScene {
 #endif
 
         public void AddChildWithCoordinates(Vector2 coordinates) {
-            var child = GameObject.Instantiate(snakeData.childPrefab, transform);
+            var child = GameObject.Instantiate<SnakeChild>(snakeData.childPrefab, transform);
             child.transform.localScale = blockSize;
             child.transform.position = boardCoordinates.GetPositionForCoordinates(coordinates);
             child.transform.SetParent(transform, true);
+            child.coordinates = coordinates;
+            EmitOccupationEvent("snake.coordinateOccupied", coordinates);
+        }
+
+        void EmitOccupationEvent(string eventName, Vector2 coordinates) {
+            if(board == null || board.notificationCenter == null)
+                return;
+
+            boardNotificationCenter.EmitEvent(eventName, new Hashtable() {
+                { "coordinates", coordinates }
+            });
         }
 
         public void MoveInDirection(Vector2 direction) {
-            var tail = transform.GetChild(transform.childCount - 1);
+            var tail = transform.GetChild(transform.childCount - 1).GetComponent<SnakeChild>();
+            var previousCoordinate = tail.coordinates;
             tail.transform.SetAsFirstSibling();
             headCoordinates += direction;
             tail.transform.position = boardCoordinates.GetPositionForCoordinates(headCoordinates);
+
+            EmitOccupationEvent("snake.coordinateDisoccupied", previousCoordinate);
+            EmitOccupationEvent("snake.coordinateOccupied", headCoordinates);
         }
     }
 }

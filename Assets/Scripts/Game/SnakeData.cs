@@ -5,6 +5,6 @@ namespace SnakeU.GameScene {
     public class SnakeData: ScriptableObject {
         [Range(1, 5)] public int initialSize = 3;
         [Range(1, 9)] public int speed = 1;
-        public GameObject childPrefab;
+        public SnakeChild childPrefab;
     }
 }
