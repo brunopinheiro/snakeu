@@ -9,13 +9,13 @@ namespace SnakeU.GameScene {
         void Awake() {
             board = GameObject.FindObjectOfType<Board>();
 
-            board.notificationCenter.AddListener("board.firstBlockRequested", SpawnObject);
-            board.notificationCenter.AddListener("snake.blockCollected", SpawnObject);
+            board.notificationCenter.AddListener(GameEvents.firstBlockRequested, SpawnObject);
+            board.notificationCenter.AddListener(GameEvents.blockCollected, SpawnObject);
         }
 
         void OnDestroy() {
-            board.notificationCenter.RemoveListener("board.firstBlockRequested", SpawnObject);
-            board.notificationCenter.RemoveListener("snake.blockCollected", SpawnObject);
+            board.notificationCenter.RemoveListener(GameEvents.firstBlockRequested, SpawnObject);
+            board.notificationCenter.RemoveListener(GameEvents.blockCollected, SpawnObject);
         }
 
         void SpawnObject(Hashtable args) {

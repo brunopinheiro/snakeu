@@ -24,7 +24,7 @@ namespace SnakeU.GameScene {
         void Start() {
             boardMapper.StartListeningEventsFrom(notificationCenter);
 
-            notificationCenter.EmitEvent("board.firstBlockRequested");
+            notificationCenter.EmitEvent(GameEvents.firstBlockRequested);
         }
     }
 }

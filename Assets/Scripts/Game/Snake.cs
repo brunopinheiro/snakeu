@@ -52,7 +52,7 @@ namespace SnakeU.GameScene {
             child.transform.position = boardCoordinates.GetPositionForCoordinates(coordinates);
             child.transform.SetParent(transform, true);
             child.coordinates = coordinates;
-            EmitOccupationEvent("snake.coordinateOccupied", coordinates);
+            EmitOccupationEvent(GameEvents.coordinateOccupied, coordinates);
         }
 
         void EmitOccupationEvent(string eventName, Vector2 coordinates) {
@@ -71,8 +71,8 @@ namespace SnakeU.GameScene {
             headCoordinates += direction;
             tail.transform.position = boardCoordinates.GetPositionForCoordinates(headCoordinates);
 
-            EmitOccupationEvent("snake.coordinateDisoccupied", previousCoordinate);
-            EmitOccupationEvent("snake.coordinateOccupied", headCoordinates);
+            EmitOccupationEvent(GameEvents.coordinateOccupied, headCoordinates);
+            EmitOccupationEvent(GameEvents.coordinateDisoccupied, previousCoordinate);
         }
     }
 }

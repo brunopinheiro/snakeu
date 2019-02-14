@@ -8,8 +8,8 @@ namespace SnakeU.GameScene {
         HashSet<Vector2> occupiedCoordinates = new HashSet<Vector2>();
 
         public void StartListeningEventsFrom(NotificationCenter notificationCenter) {
-            notificationCenter.AddListener("snake.coordinateOccupied", AddOccupiedCoordinate);
-            notificationCenter.AddListener("snake.coordinateDisoccupied", RemoveOccupiedCoordinate);
+            notificationCenter.AddListener(GameEvents.coordinateOccupied, AddOccupiedCoordinate);
+            notificationCenter.AddListener(GameEvents.coordinateDisoccupied, RemoveOccupiedCoordinate);
         }
 
         void AddOccupiedCoordinate(Hashtable args) {
@@ -23,8 +23,8 @@ namespace SnakeU.GameScene {
         }
 
         public void StopListeningEventsFrom(NotificationCenter notificationCenter) {
-            notificationCenter.RemoveListener("snake.coordinateOccupied", AddOccupiedCoordinate);
-            notificationCenter.RemoveListener("snake.coordinateDisoccupied", RemoveOccupiedCoordinate);
+            notificationCenter.RemoveListener(GameEvents.coordinateOccupied, AddOccupiedCoordinate);
+            notificationCenter.RemoveListener(GameEvents.coordinateDisoccupied, RemoveOccupiedCoordinate);
         }
 
         public Vector2[] OccupiedCoordinates {
