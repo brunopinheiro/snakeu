@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialSize: 3
   speed: 1
-  childPrefab: {fileID: 5195018446820970988, guid: 2d714151cc8714044a8edeebad0906ae,
+  childPrefab: {fileID: 5454561717483430004, guid: 2d714151cc8714044a8edeebad0906ae,
     type: 3}
