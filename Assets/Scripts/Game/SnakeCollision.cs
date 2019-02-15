@@ -6,12 +6,13 @@ namespace SnakeU.GameScene {
         Action<Vector2> emptySpaceHandler;
         Action<Vector2, GameObject> blockHitHandler;
         Action snakeHitHandler;
+        Action outOfBoardHandler;
         Vector2 coordinates;
-        GameObject coordinatesOccupier;
+        Board board;
 
-        public SnakeCollision(Vector2 coordinates, GameObject coordinatesOccupier) {
+        public SnakeCollision(Vector2 coordinates, Board board) {
             this.coordinates = coordinates;
-            this.coordinatesOccupier = coordinatesOccupier;
+            this.board = board;
         }
 
         public SnakeCollision CaseEmptySpace(Action<Vector2> emptySpaceHandler) {
@@ -29,7 +30,19 @@ namespace SnakeU.GameScene {
             return this;
         }
 
+        public SnakeCollision CaseOutOfBoard(Action outOfBoardHandler) {
+            this.outOfBoardHandler = outOfBoardHandler;
+            return this;
+        }
+
         public void Execute() {
+            if(!board.boardCoordinates.BelongsToBoard(coordinates)) {
+                outOfBoardHandler.Invoke();
+                return;
+            }
+
+            var coordinatesOccupier = board.boardMapper.GetOccupier(coordinates);
+
             if(coordinatesOccupier == null) {
                 emptySpaceHandler.Invoke(coordinates);
                 return;
