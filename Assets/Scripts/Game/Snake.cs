@@ -52,16 +52,22 @@ namespace SnakeU.GameScene {
             child.transform.position = boardCoordinates.GetPositionForCoordinates(coordinates);
             child.transform.SetParent(transform, true);
             child.coordinates = coordinates;
-            EmitOccupationEvent(GameEvents.coordinateOccupied, coordinates);
+            EmitOccupationEvent(GameEvents.coordinateOccupied, coordinates, child.gameObject);
         }
 
-        void EmitOccupationEvent(string eventName, Vector2 coordinates) {
+        void EmitOccupationEvent(string eventName, Vector2 coordinates, GameObject occupier = null) {
             if(board == null || board.notificationCenter == null)
                 return;
 
-            boardNotificationCenter.EmitEvent(eventName, new Hashtable() {
+            var arguments =  new Hashtable() {
                 { "coordinates", coordinates }
-            });
+            };
+
+            if(occupier != null) {
+                arguments.Add("occupier", occupier);
+            }
+
+            boardNotificationCenter.EmitEvent(eventName, arguments);
         }
 
         public void MoveInDirection(Vector2 direction) {
@@ -71,7 +77,7 @@ namespace SnakeU.GameScene {
             headCoordinates += direction;
             tail.transform.position = boardCoordinates.GetPositionForCoordinates(headCoordinates);
 
-            EmitOccupationEvent(GameEvents.coordinateOccupied, headCoordinates);
+            EmitOccupationEvent(GameEvents.coordinateOccupied, headCoordinates, tail.gameObject);
             EmitOccupationEvent(GameEvents.coordinateDisoccupied, previousCoordinate);
         }
     }
