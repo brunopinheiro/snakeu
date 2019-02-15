@@ -31,6 +31,10 @@ namespace SnakeU.GameScene {
             get { return board.notificationCenter; }
         }
 
+        public BoardMapper boardMapper {
+            get { return board.boardMapper; }
+        }
+
         void Awake() {
             InitializeDependencies();
         }
