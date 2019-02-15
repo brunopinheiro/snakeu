@@ -29,9 +29,21 @@ namespace SnakeU.GameScene {
         IEnumerator Move() {
             var movementDelay = 1 - snake.snakeData.speed * .1f;
             yield return new WaitForSeconds(movementDelay);
-            snake.MoveInDirection(GetMovementVectorFrom(direction));
+            MoveInDirection(direction);
             direction = nextDirection;
             StartMoveCoroutine();
+        }
+
+        void MoveInDirection(Direction direction) {
+            var directionVector = GetMovementVectorFrom(direction);
+            var tail = snake.transform.GetChild(transform.childCount - 1).GetComponent<SnakeChild>();
+            var previousCoordinate = tail.coordinates;
+            tail.transform.SetAsFirstSibling();
+            snake.headCoordinates += directionVector;
+            tail.transform.position = snake.boardCoordinates.GetPositionForCoordinates(snake.headCoordinates);
+
+            snake.EmitOccupationEvent(GameEvents.coordinateOccupied, snake.headCoordinates, tail.gameObject);
+            snake.EmitOccupationEvent(GameEvents.coordinateDisoccupied, previousCoordinate);
         }
 
         Vector2 GetMovementVectorFrom(Direction direction) {
