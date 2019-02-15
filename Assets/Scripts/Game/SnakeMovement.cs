@@ -29,9 +29,37 @@ namespace SnakeU.GameScene {
         IEnumerator Move() {
             var movementDelay = 1 - snake.snakeData.speed * .1f;
             yield return new WaitForSeconds(movementDelay);
-            snake.MoveInDirection(GetMovementVectorFrom(direction));
+            MoveInDirection(direction);
             direction = nextDirection;
             StartMoveCoroutine();
+        }
+
+        void MoveInDirection(Direction direction) {
+            var directionVector = GetMovementVectorFrom(direction);
+            var nextHeadCoordinate = snake.GetHead().coordinates + directionVector;
+            var coordinatesOccupier = snake.boardMapper.GetOccupier(nextHeadCoordinate);
+            
+            (new SnakeCollision(nextHeadCoordinate, snake.board))
+                .CaseHitSnake(snake.HandleHitItself)
+                .CaseHitBlock(snake.CollectBlock)
+                .CaseEmptySpace(MoveEmptySpace)
+                .CaseOutOfBoard(HandleOutOfBoard)
+                .Execute();
+        }
+
+        void MoveEmptySpace(Vector2 newCoordinates) {
+            var tail = snake.GetTail();
+            var previousCoordinate = tail.coordinates;
+            tail.transform.SetAsFirstSibling();
+            tail.coordinates = newCoordinates;
+            tail.transform.position = snake.boardCoordinates.GetPositionForCoordinates(newCoordinates);
+
+            snake.EmitOccupationEvent(GameEvents.coordinateOccupied, newCoordinates, tail.gameObject);
+            snake.EmitOccupationEvent(GameEvents.coordinateDisoccupied, previousCoordinate);
+        }
+
+        void HandleOutOfBoard() {
+            Debug.Log("Game Over! - Out of Board");
         }
 
         Vector2 GetMovementVectorFrom(Direction direction) {

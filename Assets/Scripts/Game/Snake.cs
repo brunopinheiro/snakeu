@@ -8,8 +8,8 @@ namespace SnakeU.GameScene {
             get;
             private set;
         }
-        
-        [HideInInspector] public Vector2 headCoordinates;
+
+        SnakeCreator snakeCreator;
 
         public BoardCoordinates boardCoordinates {
             get { return board.boardCoordinates; }
@@ -31,6 +31,18 @@ namespace SnakeU.GameScene {
             get { return board.notificationCenter; }
         }
 
+        public BoardMapper boardMapper {
+            get { return board.boardMapper; }
+        }
+
+        public SnakeChild GetTail() {
+            return transform.GetChild(transform.childCount - 1).GetComponent<SnakeChild>();
+        }
+
+        public SnakeChild GetHead() {
+            return transform.GetChild(0).GetComponent<SnakeChild>();
+        }
+
         void Awake() {
             InitializeDependencies();
         }
@@ -38,41 +50,43 @@ namespace SnakeU.GameScene {
         void InitializeDependencies() {
             if(board == null)
                 board = GameObject.FindObjectOfType<Board>();
+
+            if(snakeCreator == null)
+                snakeCreator = GetComponent<SnakeCreator>();
         }
 
 #if UNITY_EDITOR
         void Update() {
+            if(UnityEditor.EditorApplication.isPlaying)
+                return;
+
             InitializeDependencies();
         }
 #endif
 
-        public void AddChildWithCoordinates(Vector2 coordinates) {
-            var child = GameObject.Instantiate<SnakeChild>(snakeData.childPrefab, transform);
-            child.transform.localScale = blockSize;
-            child.transform.position = boardCoordinates.GetPositionForCoordinates(coordinates);
-            child.transform.SetParent(transform, true);
-            child.coordinates = coordinates;
-            EmitOccupationEvent(GameEvents.coordinateOccupied, coordinates);
-        }
-
-        void EmitOccupationEvent(string eventName, Vector2 coordinates) {
+        public void EmitOccupationEvent(string eventName, Vector2 coordinates, GameObject occupier = null) {
             if(board == null || board.notificationCenter == null)
                 return;
 
-            boardNotificationCenter.EmitEvent(eventName, new Hashtable() {
+            var arguments =  new Hashtable() {
                 { "coordinates", coordinates }
-            });
+            };
+
+            if(occupier != null) {
+                arguments.Add("occupier", occupier);
+            }
+
+            boardNotificationCenter.EmitEvent(eventName, arguments);
         }
 
-        public void MoveInDirection(Vector2 direction) {
-            var tail = transform.GetChild(transform.childCount - 1).GetComponent<SnakeChild>();
-            var previousCoordinate = tail.coordinates;
-            tail.transform.SetAsFirstSibling();
-            headCoordinates += direction;
-            tail.transform.position = boardCoordinates.GetPositionForCoordinates(headCoordinates);
+        public void CollectBlock(Vector2 coordinates, GameObject block) {
+            GameObject.Destroy(block);
+            snakeCreator.CreateChildAt(coordinates).transform.SetAsFirstSibling();
+            boardNotificationCenter.EmitEvent(GameEvents.blockCollected);
+        }
 
-            EmitOccupationEvent(GameEvents.coordinateOccupied, headCoordinates);
-            EmitOccupationEvent(GameEvents.coordinateDisoccupied, previousCoordinate);
+        public void HandleHitItself() {
+            Debug.Log("Game Over! - Hit itself");
         }
     }
 }

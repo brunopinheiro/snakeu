@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace SnakeU.GameScene {
     public class BoardMapper {
-        HashSet<Vector2> occupiedCoordinates = new HashSet<Vector2>();
+        Dictionary<Vector2, GameObject> occupiedCoordinates = new Dictionary<Vector2, GameObject>();
 
         public void StartListeningEventsFrom(NotificationCenter notificationCenter) {
             notificationCenter.AddListener(GameEvents.coordinateOccupied, AddOccupiedCoordinate);
@@ -13,8 +13,9 @@ namespace SnakeU.GameScene {
         }
 
         void AddOccupiedCoordinate(Hashtable args) {
-            var coordinate = (Vector2)args["coordinates"];
-            occupiedCoordinates.Add(coordinate);
+            var occupier = args["occupier"] as GameObject;
+            var coordinates = (Vector2)args["coordinates"];
+            occupiedCoordinates[coordinates] = occupier;
         }
 
         void RemoveOccupiedCoordinate(Hashtable args) {
@@ -28,7 +29,11 @@ namespace SnakeU.GameScene {
         }
 
         public Vector2[] OccupiedCoordinates {
-            get { return occupiedCoordinates.ToArray(); }
+            get { return occupiedCoordinates.Keys.ToArray(); }
+        }
+
+        public GameObject GetOccupier(Vector2 coordinates) {
+            return occupiedCoordinates.ContainsKey(coordinates) ? occupiedCoordinates[coordinates] : null;
         }
     }
 }

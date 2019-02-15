@@ -24,6 +24,11 @@ namespace SnakeU.GameScene {
             newBlock.transform.localScale = board.boardData.blockSize;
             newBlock.transform.position = board.boardCoordinates.GetPositionForCoordinates(newCoordinates);
             newBlock.transform.SetParent(transform, true);
+
+            board.notificationCenter.EmitEvent(GameEvents.coordinateOccupied, new Hashtable() {
+                { "coordinates", newCoordinates },
+                { "occupier", newBlock }
+            });
         }
     }
 }

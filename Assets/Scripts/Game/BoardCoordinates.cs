@@ -71,5 +71,12 @@ namespace SnakeU.GameScene {
 
             return allCoordinates.Except(boardMapper.OccupiedCoordinates).ToArray();
         }
+
+        public bool BelongsToBoard(Vector2 coordinates) {
+            return coordinates.x >= 0 &&
+            coordinates.y >= 0 &&
+            coordinates.x < boardDimensions.columns && 
+            coordinates.y < boardDimensions.rows;
+        }
     }
 }
