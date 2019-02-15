@@ -40,19 +40,11 @@ namespace SnakeU.GameScene {
             var coordinatesOccupier = snake.boardMapper.GetOccupier(nextHeadCoordinate);
             
             (new SnakeCollision(nextHeadCoordinate, snake.board))
-                .CaseHitSnake(HandleSnakeHit)
-                .CaseHitBlock(HandleBlockHit)
+                .CaseHitSnake(snake.HandleHitItself)
+                .CaseHitBlock(snake.CollectBlock)
                 .CaseEmptySpace(MoveEmptySpace)
                 .CaseOutOfBoard(HandleOutOfBoard)
                 .Execute();
-        }
-
-        void HandleSnakeHit() {
-            Debug.Log("Game Over! - Hit itself");
-        }
-
-        void HandleBlockHit(Vector2 coordinates, GameObject blockObject) {
-            Debug.Log("Block Hit!");
         }
 
         void MoveEmptySpace(Vector2 newCoordinates) {

@@ -36,6 +36,9 @@ namespace SnakeU.GameScene {
 
 #if UNITY_EDITOR
         void Update() {
+            if(UnityEditor.EditorApplication.isPlaying)
+                return;
+
             InitializeDependencies();
 
             // during edit mode, it is possible that you didn't set board field yet

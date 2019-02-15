@@ -35,23 +35,30 @@ namespace SnakeU.GameScene {
             for(int i = 0; i < snake.snakeData.initialSize; i++) {
                 var headCoordinates = i == 0 ? snake.boardCoordinates.center : snake.GetHead().coordinates;
                 var childCoordinates = headCoordinates + growthDirection * i;
-
-                var child = GameObject.Instantiate<SnakeChild>(snake.snakeData.childPrefab, transform);
-                child.transform.localScale = snake.blockSize;
-                child.transform.position = snake.boardCoordinates.GetPositionForCoordinates(childCoordinates);
-                child.transform.SetParent(transform, true);
-                child.coordinates = childCoordinates;
-
-                snake.EmitOccupationEvent(
-                    GameEvents.coordinateOccupied,
-                    childCoordinates,
-                    child.gameObject
-                );
+                CreateChildAt(childCoordinates);
             }
+        }
+
+        public SnakeChild CreateChildAt(Vector2 coordinates) {
+            var child = GameObject.Instantiate<SnakeChild>(snake.snakeData.childPrefab, transform);
+            child.transform.localScale = snake.blockSize;
+            child.transform.position = snake.boardCoordinates.GetPositionForCoordinates(coordinates);
+            child.coordinates = coordinates;
+
+            snake.EmitOccupationEvent(
+                GameEvents.coordinateOccupied,
+                coordinates,
+                child.gameObject
+            );
+
+            return child;
         }
 
 #if UNITY_EDITOR
         void Update() {
+            if(UnityEditor.EditorApplication.isPlaying)
+                return;
+
             InitializeDependencies();
 
             if(snake.transform.childCount != snake.snakeData.initialSize) {

@@ -9,6 +9,8 @@ namespace SnakeU.GameScene {
             private set;
         }
 
+        SnakeCreator snakeCreator;
+
         public BoardCoordinates boardCoordinates {
             get { return board.boardCoordinates; }
         }
@@ -48,10 +50,16 @@ namespace SnakeU.GameScene {
         void InitializeDependencies() {
             if(board == null)
                 board = GameObject.FindObjectOfType<Board>();
+
+            if(snakeCreator == null)
+                snakeCreator = GetComponent<SnakeCreator>();
         }
 
 #if UNITY_EDITOR
         void Update() {
+            if(UnityEditor.EditorApplication.isPlaying)
+                return;
+
             InitializeDependencies();
         }
 #endif
@@ -69,6 +77,16 @@ namespace SnakeU.GameScene {
             }
 
             boardNotificationCenter.EmitEvent(eventName, arguments);
+        }
+
+        public void CollectBlock(Vector2 coordinates, GameObject block) {
+            GameObject.Destroy(block);
+            snakeCreator.CreateChildAt(coordinates).transform.SetAsFirstSibling();
+            boardNotificationCenter.EmitEvent(GameEvents.blockCollected);
+        }
+
+        public void HandleHitItself() {
+            Debug.Log("Game Over! - Hit itself");
         }
     }
 }
