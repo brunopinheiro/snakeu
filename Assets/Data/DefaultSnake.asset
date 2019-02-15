@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: DefaultSnake
   m_EditorClassIdentifier: 
   initialSize: 5
-  speed: 3
+  speed: 9
   childPrefab: {fileID: 5454561717483430004, guid: 2d714151cc8714044a8edeebad0906ae,
     type: 3}

@@ -8,8 +8,6 @@ namespace SnakeU.GameScene {
             get;
             private set;
         }
-        
-        [HideInInspector] public Vector2 headCoordinates;
 
         public BoardCoordinates boardCoordinates {
             get { return board.boardCoordinates; }
@@ -33,6 +31,14 @@ namespace SnakeU.GameScene {
 
         public BoardMapper boardMapper {
             get { return board.boardMapper; }
+        }
+
+        public SnakeChild GetTail() {
+            return transform.GetChild(transform.childCount - 1).GetComponent<SnakeChild>();
+        }
+
+        public SnakeChild GetHead() {
+            return transform.GetChild(0).GetComponent<SnakeChild>();
         }
 
         void Awake() {

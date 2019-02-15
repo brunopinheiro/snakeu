@@ -36,7 +36,7 @@ namespace SnakeU.GameScene {
 
         void MoveInDirection(Direction direction) {
             var directionVector = GetMovementVectorFrom(direction);
-            var nextHeadCoordinate = snake.headCoordinates + directionVector;
+            var nextHeadCoordinate = snake.GetHead().coordinates + directionVector;
             var coordinatesOccupier = snake.boardMapper.GetOccupier(nextHeadCoordinate);
             
             (new SnakeCollision(nextHeadCoordinate, coordinatesOccupier))
@@ -55,19 +55,14 @@ namespace SnakeU.GameScene {
         }
 
         void MoveEmptySpace(Vector2 newCoordinates) {
-            var tail = GetSnakeTail();
+            var tail = snake.GetTail();
             var previousCoordinate = tail.coordinates;
             tail.transform.SetAsFirstSibling();
-            snake.headCoordinates = newCoordinates;
             tail.coordinates = newCoordinates;
             tail.transform.position = snake.boardCoordinates.GetPositionForCoordinates(newCoordinates);
 
             snake.EmitOccupationEvent(GameEvents.coordinateOccupied, newCoordinates, tail.gameObject);
             snake.EmitOccupationEvent(GameEvents.coordinateDisoccupied, previousCoordinate);
-        }
-
-        SnakeChild GetSnakeTail() {
-            return snake.transform.GetChild(transform.childCount - 1).GetComponent<SnakeChild>();
         }
 
         Vector2 GetMovementVectorFrom(Direction direction) {
