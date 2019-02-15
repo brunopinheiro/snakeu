@@ -46,16 +46,7 @@ namespace SnakeU.GameScene {
         }
 #endif
 
-        public void AddChildWithCoordinates(Vector2 coordinates) {
-            var child = GameObject.Instantiate<SnakeChild>(snakeData.childPrefab, transform);
-            child.transform.localScale = blockSize;
-            child.transform.position = boardCoordinates.GetPositionForCoordinates(coordinates);
-            child.transform.SetParent(transform, true);
-            child.coordinates = coordinates;
-            EmitOccupationEvent(GameEvents.coordinateOccupied, coordinates, child.gameObject);
-        }
-
-        void EmitOccupationEvent(string eventName, Vector2 coordinates, GameObject occupier = null) {
+        public void EmitOccupationEvent(string eventName, Vector2 coordinates, GameObject occupier = null) {
             if(board == null || board.notificationCenter == null)
                 return;
 
@@ -68,17 +59,6 @@ namespace SnakeU.GameScene {
             }
 
             boardNotificationCenter.EmitEvent(eventName, arguments);
-        }
-
-        public void MoveInDirection(Vector2 direction) {
-            var tail = transform.GetChild(transform.childCount - 1).GetComponent<SnakeChild>();
-            var previousCoordinate = tail.coordinates;
-            tail.transform.SetAsFirstSibling();
-            headCoordinates += direction;
-            tail.transform.position = boardCoordinates.GetPositionForCoordinates(headCoordinates);
-
-            EmitOccupationEvent(GameEvents.coordinateOccupied, headCoordinates, tail.gameObject);
-            EmitOccupationEvent(GameEvents.coordinateDisoccupied, previousCoordinate);
         }
     }
 }

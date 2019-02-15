@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace SnakeU.GameScene {
@@ -34,7 +35,18 @@ namespace SnakeU.GameScene {
         void CreateInitialChildren() {
             for(int i = 0; i < snake.snakeData.initialSize; i++) {
                 var childCoordinates = snake.headCoordinates + growthDirection * i;
-                snake.AddChildWithCoordinates(childCoordinates);
+
+                var child = GameObject.Instantiate<SnakeChild>(snake.snakeData.childPrefab, transform);
+                child.transform.localScale = snake.blockSize;
+                child.transform.position = snake.boardCoordinates.GetPositionForCoordinates(childCoordinates);
+                child.transform.SetParent(transform, true);
+                child.coordinates = childCoordinates;
+
+                snake.EmitOccupationEvent(
+                    GameEvents.coordinateOccupied,
+                    childCoordinates,
+                    child.gameObject
+                );
             }
         }
 
