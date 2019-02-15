@@ -39,15 +39,16 @@ namespace SnakeU.GameScene {
             var nextHeadCoordinate = snake.GetHead().coordinates + directionVector;
             var coordinatesOccupier = snake.boardMapper.GetOccupier(nextHeadCoordinate);
             
-            (new SnakeCollision(nextHeadCoordinate, coordinatesOccupier))
+            (new SnakeCollision(nextHeadCoordinate, snake.board))
                 .CaseHitSnake(HandleSnakeHit)
                 .CaseHitBlock(HandleBlockHit)
                 .CaseEmptySpace(MoveEmptySpace)
+                .CaseOutOfBoard(HandleOutOfBoard)
                 .Execute();
         }
 
         void HandleSnakeHit() {
-            Debug.Log("Game Over!");
+            Debug.Log("Game Over! - Hit itself");
         }
 
         void HandleBlockHit(Vector2 coordinates, GameObject blockObject) {
@@ -63,6 +64,10 @@ namespace SnakeU.GameScene {
 
             snake.EmitOccupationEvent(GameEvents.coordinateOccupied, newCoordinates, tail.gameObject);
             snake.EmitOccupationEvent(GameEvents.coordinateDisoccupied, previousCoordinate);
+        }
+
+        void HandleOutOfBoard() {
+            Debug.Log("Game Over! - Out of Board");
         }
 
         Vector2 GetMovementVectorFrom(Direction direction) {
