@@ -36,14 +36,38 @@ namespace SnakeU.GameScene {
 
         void MoveInDirection(Direction direction) {
             var directionVector = GetMovementVectorFrom(direction);
-            var tail = snake.transform.GetChild(transform.childCount - 1).GetComponent<SnakeChild>();
+            var nextHeadCoordinate = snake.headCoordinates + directionVector;
+            var coordinatesOccupier = snake.boardMapper.GetOccupier(nextHeadCoordinate);
+            
+            (new SnakeCollision(nextHeadCoordinate, coordinatesOccupier))
+                .CaseHitSnake(HandleSnakeHit)
+                .CaseHitBlock(HandleBlockHit)
+                .CaseEmptySpace(MoveEmptySpace)
+                .Execute();
+        }
+
+        void HandleSnakeHit() {
+            Debug.Log("Game Over!");
+        }
+
+        void HandleBlockHit(Vector2 coordinates, GameObject blockObject) {
+            Debug.Log("Block Hit!");
+        }
+
+        void MoveEmptySpace(Vector2 newCoordinates) {
+            var tail = GetSnakeTail();
             var previousCoordinate = tail.coordinates;
             tail.transform.SetAsFirstSibling();
-            snake.headCoordinates += directionVector;
-            tail.transform.position = snake.boardCoordinates.GetPositionForCoordinates(snake.headCoordinates);
+            snake.headCoordinates = newCoordinates;
+            tail.coordinates = newCoordinates;
+            tail.transform.position = snake.boardCoordinates.GetPositionForCoordinates(newCoordinates);
 
-            snake.EmitOccupationEvent(GameEvents.coordinateOccupied, snake.headCoordinates, tail.gameObject);
+            snake.EmitOccupationEvent(GameEvents.coordinateOccupied, newCoordinates, tail.gameObject);
             snake.EmitOccupationEvent(GameEvents.coordinateDisoccupied, previousCoordinate);
+        }
+
+        SnakeChild GetSnakeTail() {
+            return snake.transform.GetChild(transform.childCount - 1).GetComponent<SnakeChild>();
         }
 
         Vector2 GetMovementVectorFrom(Direction direction) {

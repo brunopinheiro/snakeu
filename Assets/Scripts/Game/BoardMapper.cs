@@ -31,5 +31,9 @@ namespace SnakeU.GameScene {
         public Vector2[] OccupiedCoordinates {
             get { return occupiedCoordinates.Keys.ToArray(); }
         }
+
+        public GameObject GetOccupier(Vector2 coordinates) {
+            return occupiedCoordinates.ContainsKey(coordinates) ? occupiedCoordinates[coordinates] : null;
+        }
     }
 }
