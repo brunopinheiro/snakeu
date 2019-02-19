@@ -24,7 +24,8 @@ namespace SnakeU.GameScene {
         }
 
         void Start() {
-            board.notificationCenter.AddListener(GameEvents.blockCollected, HandleBlockCollected);
+            if(board != null)
+                board.notificationCenter.AddListener(GameEvents.blockCollected, HandleBlockCollected);
         }
 
         void HandleBlockCollected(Hashtable args) {
@@ -34,11 +35,6 @@ namespace SnakeU.GameScene {
 
         void UpdateScoreText() {
             valueText.text = score.ToString(valueMask);
-        }
-
-        void OnDestroy() {
-            if(board != null)
-                board.notificationCenter.RemoveListener(GameEvents.blockCollected, HandleBlockCollected);
         }
 
 #if UNITY_EDITOR
