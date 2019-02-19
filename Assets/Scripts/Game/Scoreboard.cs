@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ namespace SnakeU.GameScene {
         public string valueMask = "000000";
         int score = 0;
         Text valueText;
+        Board board;
 
         void Awake() {
             InitializeDependencies();
@@ -16,12 +18,33 @@ namespace SnakeU.GameScene {
         void InitializeDependencies() {
             if(valueText == null)
                 valueText = GetComponent<Text>();
+
+            if(board == null)
+                board = GameObject.FindObjectOfType<Board>();
+        }
+
+        void Start() {
+            board.notificationCenter.AddListener(GameEvents.blockCollected, HandleBlockCollected);
+        }
+
+        void HandleBlockCollected(Hashtable args) {
+            score += 9;
+            UpdateScoreText();
+        }
+
+        void UpdateScoreText() {
+            valueText.text = score.ToString(valueMask);
+        }
+
+        void OnDestroy() {
+            if(board != null)
+                board.notificationCenter.RemoveListener(GameEvents.blockCollected, HandleBlockCollected);
         }
 
 #if UNITY_EDITOR
         void Update() {
             InitializeDependencies();
-            valueText.text = score.ToString(valueMask);
+            UpdateScoreText();
         }
 #endif
     }
