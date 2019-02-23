@@ -5,6 +5,8 @@ Unity: 2018.3.4f1
 
 ![](https://media.giphy.com/media/FfFFMKNjaza41CtmEh/giphy.gif)
 
+> Had to put the gif frame rate low during the capture. The game on unity feels a bit better (ﾉ◕ヮ◕)ﾉ*:・ﾟ✧
+
 ## Why I created this project?
 As most of the developers, I had this problem of trying to complicate simple things. So, to start reshaping my mind, I decided to create small and simple projects.
 My goal was to avoid overengineering (and looking at the code, I believe it becomes really clear), creating just enough code to complete a feature, and refactoring when necessary.
