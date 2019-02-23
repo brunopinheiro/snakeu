@@ -24,12 +24,15 @@ namespace SnakeU.GameScene {
         }
 
         void Start() {
-            if(board != null)
+            if(board != null && board.notificationCenter != null)
                 board.notificationCenter.AddListener(GameEvents.blockCollected, HandleBlockCollected);
         }
 
         void HandleBlockCollected(Hashtable args) {
             score += 9;
+            board.notificationCenter.EmitEvent(GameEvents.scoreUpdated, new Hashtable() {
+                { "score", score }
+            });
             UpdateScoreText();
         }
 

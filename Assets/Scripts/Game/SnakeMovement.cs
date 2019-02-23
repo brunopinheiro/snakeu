@@ -13,13 +13,30 @@ namespace SnakeU.GameScene {
         Direction direction = Direction.Right;
         Direction nextDirection = Direction.Right;
         Coroutine movementCoroutine;
+        int currentSpeed = 0;
 
         void Awake() {
             snake = GetComponent<Snake>();
+            currentSpeed = snake.snakeData.speed;
         }
 
         void Start() {
             StartMoveCoroutine();
+            snake.boardNotificationCenter.AddListener(GameEvents.scoreUpdated, HandleScoreUpdated);
+            currentSpeed = Mathf.Clamp(currentSpeed + 1, 0, 9);
+            snake.boardNotificationCenter.EmitEvent(GameEvents.speedUpdated, new Hashtable() {
+                { "speed", currentSpeed }
+            });
+        }
+ 
+        void HandleScoreUpdated(Hashtable arguments){
+            var score = (int)arguments["score"];
+            if(score % 90 == 0) {
+                currentSpeed = Mathf.Clamp(currentSpeed + 1, 0, 9);
+                snake.boardNotificationCenter.EmitEvent(GameEvents.speedUpdated, new Hashtable() {
+                    { "speed", currentSpeed }
+                });
+            }
         }
 
         void StartMoveCoroutine() {
@@ -27,7 +44,7 @@ namespace SnakeU.GameScene {
         }
 
         IEnumerator Move() {
-            var movementDelay = 1 - snake.snakeData.speed * .1f;
+            var movementDelay = .5f - (currentSpeed * .01f);
             yield return new WaitForSeconds(movementDelay);
             MoveInDirection(direction);
             direction = nextDirection;
