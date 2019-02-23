@@ -50,9 +50,9 @@ namespace SnakeU.GameScene {
         IEnumerator Move() {
             var movementDelay = .5f - (currentSpeed * .01f);
             yield return new WaitForSeconds(movementDelay);
+            StartMoveCoroutine();
             MoveInDirection(direction);
             direction = nextDirection;
-            StartMoveCoroutine();
         }
 
         void MoveInDirection(Direction direction) {
@@ -124,6 +124,8 @@ namespace SnakeU.GameScene {
 
         void HandleGameStop(Hashtable arguments) {
             StopCoroutine(movementCoroutine);
+            direction = Direction.Right;
+            nextDirection = Direction.Right;
         }
     }
 }

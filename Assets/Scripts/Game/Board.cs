@@ -24,8 +24,6 @@ namespace SnakeU.GameScene {
         void Start() {
             Application.targetFrameRate = 60;
             boardMapper.StartListeningEventsFrom(notificationCenter);
-
-            notificationCenter.EmitEvent(GameEvents.firstBlockRequested);
         }
     }
 }
