@@ -23,7 +23,6 @@ namespace SnakeU.GameScene {
         void Start() {
             StartMoveCoroutine();
             snake.boardNotificationCenter.AddListener(GameEvents.scoreUpdated, HandleScoreUpdated);
-            currentSpeed = Mathf.Clamp(currentSpeed + 1, 0, 9);
             snake.boardNotificationCenter.EmitEvent(GameEvents.speedUpdated, new Hashtable() {
                 { "speed", currentSpeed }
             });
