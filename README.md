@@ -22,3 +22,6 @@ Maybe I could add some improvements to it like new features, make controls and g
 ## Resources
 - [Kirokaze Gameboy Palette](https://lospec.com/palette-list/kirokaze-gameboy)
 - [Press Start 2P Font](https://fonts.google.com/specimen/Press+Start+2P)
+
+## LICENSE
+[GNU GPLv3](LICENSE)
