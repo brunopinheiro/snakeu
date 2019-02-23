@@ -17,17 +17,22 @@ namespace SnakeU.GameScene {
 
         void Awake() {
             snake = GetComponent<Snake>();
-            currentSpeed = snake.snakeData.speed;
         }
 
         void Start() {
-            StartMoveCoroutine();
+            snake.boardNotificationCenter.AddListener(GameEvents.gameStart, HandleGameStart);
+            snake.boardNotificationCenter.AddListener(GameEvents.gameStop, HandleGameStop);
             snake.boardNotificationCenter.AddListener(GameEvents.scoreUpdated, HandleScoreUpdated);
+        }
+
+        void HandleGameStart(Hashtable arguments) {
+            currentSpeed = snake.snakeData.speed;
             snake.boardNotificationCenter.EmitEvent(GameEvents.speedUpdated, new Hashtable() {
                 { "speed", currentSpeed }
             });
+            StartMoveCoroutine();
         }
- 
+
         void HandleScoreUpdated(Hashtable arguments){
             var score = (int)arguments["score"];
             if(score % 90 == 0) {
@@ -54,12 +59,12 @@ namespace SnakeU.GameScene {
             var directionVector = GetMovementVectorFrom(direction);
             var nextHeadCoordinate = snake.GetHead().coordinates + directionVector;
             var coordinatesOccupier = snake.boardMapper.GetOccupier(nextHeadCoordinate);
-            
+
             (new SnakeCollision(nextHeadCoordinate, snake.board))
                 .CaseHitSnake(snake.HandleHitItself)
                 .CaseHitBlock(snake.CollectBlock)
                 .CaseEmptySpace(MoveEmptySpace)
-                .CaseOutOfBoard(HandleOutOfBoard)
+                .CaseOutOfBoard(snake.HandleOutOfBoard)
                 .Execute();
         }
 
@@ -72,10 +77,6 @@ namespace SnakeU.GameScene {
 
             snake.EmitOccupationEvent(GameEvents.coordinateOccupied, newCoordinates, tail.gameObject);
             snake.EmitOccupationEvent(GameEvents.coordinateDisoccupied, previousCoordinate);
-        }
-
-        void HandleOutOfBoard() {
-            Debug.Log("Game Over! - Out of Board");
         }
 
         Vector2 GetMovementVectorFrom(Direction direction) {
@@ -119,6 +120,10 @@ namespace SnakeU.GameScene {
 
         void TryMoveRight() {
             TryMoveInDirection(Direction.Right);
+        }
+
+        void HandleGameStop(Hashtable arguments) {
+            StopCoroutine(movementCoroutine);
         }
     }
 }

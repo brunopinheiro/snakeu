@@ -12,6 +12,10 @@ namespace SnakeU.GameScene {
         }
 
         void Start() {
+            snake.boardNotificationCenter.AddListener(GameEvents.gameStart, HandleGameStart);
+        }
+
+        void HandleGameStart(Hashtable arguments) {
             snake.transform.position = snake.boardCoordinates.centerPosition;
             ClearChildren();
             CreateInitialChildren();

@@ -69,7 +69,11 @@ namespace SnakeU.GameScene {
         }
 
         public void HandleHitItself() {
-            Debug.Log("Game Over! - Hit itself");
+            boardNotificationCenter.EmitEvent(GameEvents.gameStop, new Hashtable());
+        }
+
+        public void HandleOutOfBoard() {
+            boardNotificationCenter.EmitEvent(GameEvents.gameStop, new Hashtable());
         }
     }
 }
