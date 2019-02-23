@@ -27,7 +27,7 @@ namespace SnakeU.GameScene {
             get { return board.boardData.snake; }
         }
 
-        NotificationCenter boardNotificationCenter {
+        public NotificationCenter boardNotificationCenter {
             get { return board.notificationCenter; }
         }
 
