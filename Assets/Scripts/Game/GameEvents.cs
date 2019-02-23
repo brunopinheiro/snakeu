@@ -6,5 +6,7 @@ namespace SnakeU.GameScene {
         public static string firstBlockRequested = "board.firstBlockRequested";
         public static string scoreUpdated = "score.updated";
         public static string speedUpdated = "snake.speedUpdated";
+        public static string gameStart = "game.start";
+        public static string gameStop = "game.stop";
     }
 }

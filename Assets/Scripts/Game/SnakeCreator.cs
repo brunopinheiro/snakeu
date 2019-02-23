@@ -3,19 +3,11 @@ using UnityEngine;
 
 namespace SnakeU.GameScene {
     [RequireComponent(typeof(Snake))]
-    [ExecuteAlways]
     public class SnakeCreator: MonoBehaviour {
         Snake snake;
         static Vector2 growthDirection = Vector2.left;
 
         void Awake() {
-            InitializeDependencies();
-        }
-
-        void InitializeDependencies() {
-            if(snake != null)
-                return;
-
             snake = GetComponent<Snake>();
         }
 
@@ -53,19 +45,5 @@ namespace SnakeU.GameScene {
 
             return child;
         }
-
-#if UNITY_EDITOR
-        void Update() {
-            if(UnityEditor.EditorApplication.isPlaying)
-                return;
-
-            InitializeDependencies();
-
-            if(snake.transform.childCount != snake.snakeData.initialSize) {
-                ClearChildren();
-                CreateInitialChildren();
-            }
-        }
-#endif
     }
 }
