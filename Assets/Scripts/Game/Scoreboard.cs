@@ -24,8 +24,10 @@ namespace SnakeU.GameScene {
         }
 
         void Start() {
-            if(board != null && board.notificationCenter != null)
+            if(board != null && board.notificationCenter != null) {
                 board.notificationCenter.AddListener(GameEvents.blockCollected, HandleBlockCollected);
+                board.notificationCenter.AddListener(GameEvents.gameStart, (h) => { score = 0; UpdateScoreText(); });
+            }
         }
 
         void HandleBlockCollected(Hashtable args) {

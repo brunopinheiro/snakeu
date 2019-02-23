@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 
 namespace SnakeU.GameScene {
-    [ExecuteAlways]
     public class Snake: MonoBehaviour {
         public Board board {
             get;
@@ -44,25 +43,9 @@ namespace SnakeU.GameScene {
         }
 
         void Awake() {
-            InitializeDependencies();
+            board = GameObject.FindObjectOfType<Board>();
+            snakeCreator = GetComponent<SnakeCreator>();
         }
-
-        void InitializeDependencies() {
-            if(board == null)
-                board = GameObject.FindObjectOfType<Board>();
-
-            if(snakeCreator == null)
-                snakeCreator = GetComponent<SnakeCreator>();
-        }
-
-#if UNITY_EDITOR
-        void Update() {
-            if(UnityEditor.EditorApplication.isPlaying)
-                return;
-
-            InitializeDependencies();
-        }
-#endif
 
         public void EmitOccupationEvent(string eventName, Vector2 coordinates, GameObject occupier = null) {
             if(board == null || board.notificationCenter == null)
@@ -86,7 +69,11 @@ namespace SnakeU.GameScene {
         }
 
         public void HandleHitItself() {
-            Debug.Log("Game Over! - Hit itself");
+            boardNotificationCenter.EmitEvent(GameEvents.gameStop, new Hashtable());
+        }
+
+        public void HandleOutOfBoard() {
+            boardNotificationCenter.EmitEvent(GameEvents.gameStop, new Hashtable());
         }
     }
 }

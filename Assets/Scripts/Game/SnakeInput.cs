@@ -2,12 +2,27 @@ using UnityEngine;
 using System.Collections.Generic;
 
 namespace SnakeU.GameScene {
+    [RequireComponent(typeof(Snake))]
     public class SnakeInput: MonoBehaviour {
+        Snake snake;
         static string HorizontalInput = "Horizontal";
         static string VerticalInput = "Vertical";
         Dictionary<string, int> previousInputs = new Dictionary<string, int>();
+        bool running = false;
+
+        void Awake() {
+            snake = GetComponent<Snake>();
+        }
+
+        void Start() {
+            snake.boardNotificationCenter.AddListener(GameEvents.gameStart, (h) => running = true);
+            snake.boardNotificationCenter.AddListener(GameEvents.gameStop, (h) => running = false);
+        }
 
         void Update() {
+            if(!running)
+                return;
+
             if(CheckInput(HorizontalInput)) {
                 previousInputs[VerticalInput] = 0;
             } else {
